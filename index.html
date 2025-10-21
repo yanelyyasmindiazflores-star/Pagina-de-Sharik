@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Feliz 20 Mi Vida Hermosa ❤️ El Reto de Hogwarts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georgia:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    :root{
+        --bg:#FFF5F7;
+        --paper:#fff;
+        --accent:#ff5c8a; /* Rosa Fuerte */
+        --accent-2:#ffb7d2; /* Rosa Claro */
+        --text:#4b2b2b; /* Marrón Oscuro */
+        /* Colores de Harry Potter */
+        --hp-dark-bg: #1a1a1a; /* Fondo muy oscuro */
+        --hp-gold: #FFD700; /* Dorado */
+        --hp-silver: #C0C0C0; /* Plata */
+        --hp-red: #740001; /* Gryffindor Red */
+        --hp-yellow: #FFD800; /* Hufflepuff Yellow */
+        --hp-blue: #0E1A40; /* Ravenclaw Blue */
+        --hp-green: #1A472A; /* Slytherin Green */
+    }
+    *{box-sizing:border-box}
+    body{
+        margin:0;
+        font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, #fff6fb 0%, #ffeef6 100%);
+        color:var(--text);
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:24px;
+        overflow: hidden; /* Evita barras de desplazamiento innecesarias */
+    }
+
+    .card {
+        width:100%;
+        max-width:900px;
+        height: 90vh; /* Altura para el contenedor del juego */
+        background: var(--paper);
+        border-radius:18px;
+        box-shadow: 0 18px 40px rgba(95,35,45,0.12);
+        padding:32px;
+        position:relative;
+        overflow:hidden;
+        display: flex; /* Para controlar la visibilidad del contenido */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* -------------------- PANTALLAS DEL JUEGO / SECCIONES FINALES -------------------- */
+    /* Estilo base para todas las pantallas y secciones flotantes */
+    .game-screen, .final-section {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+        transition: opacity 1s ease-in-out, transform 1s ease-in-out, background-image 1s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        background-size: cover;
+        background-position: center;
+        color: white; /* Texto blanco sobre fondos oscuros */
+        z-index: 10;
+    }
+
+    /* La sección de carta y recuerdos usa fondo de tarjeta */
+    .final-section {
+        background: var(--paper); /* Fondo de tarjeta normal */
+        color: var(--text);
+        overflow-y: auto; /* Permite desplazamiento en el contenido final */
+        padding: 20px;
+    }
+    
+    .game-screen.active, .final-section.active {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    /* Pantalla Intermedia de los Botones (Memory Gate) */
+    #memoryGateScreen {
+        background-color: rgba(14, 26, 64, 0.9); /* Azul oscuro de Ravenclaw semi-transparente */
+        color: white;
+    }
+    #memoryGateScreen h2 {
+        color: var(--hp-gold); /* Título dorado */
+        font-size: 50px;
+        font-family: 'Cinzel Decorative', serif; /* Fuente temática */
+        text-shadow: 3px 3px 5px rgba(0,0,0,0.9);
+        margin-bottom: 20px;
+    }
+    #memoryGateScreen p {
+        font-size: 22px;
+        color: var(--hp-silver); /* Texto plateado */
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+        margin-bottom: 30px;
+    }
+    #memoryGateScreen .hp-gate-box {
+        background: rgba(0,0,0,0.75); /* Fondo oscuro semitransparente para el contenido */
+        padding: 40px;
+        border-radius: 15px;
+        border: 4px solid var(--hp-gold); /* Borde dorado */
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); /* Resplandor dorado */
+        max-width: 700px; /* Ancho máximo para el cuadro de contenido */
+        margin: 20px;
+    }
+    #memoryGateScreen .button-container {
+        display: flex;
+        gap: 25px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Estilos específicos de las pantallas de juego */
+    .game-screen h2 {
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 42px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+    .game-screen p {
+        font-size: 20px;
+        margin-bottom: 20px;
+        max-width: 600px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .game-input {
+        padding: 12px;
+        font-size: 22px;
+        margin-bottom: 20px;
+        border: 2px solid var(--hp-gold);
+        border-radius: 8px;
+        text-align: center;
+        background: rgba(0,0,0,0.5); /* Fondo semitransparente */
+        color: white;
+        width: 300px;
+        text-transform: lowercase;
+        outline: none; /* Quitar el contorno al enfocar */
+    }
+    .game-input::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+    /* Botones de juego */
+    .game-btn {
+        background: var(--hp-gold);
+        color: var(--hp-dark-bg);
+        border: none;
+        font-weight: bold;
+        padding: 12px 25px;
+        font-size: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        transition: transform 0.2s, background 0.2s;
+    }
+    .game-btn.gate-btn {
+        background: var(--accent); /* Rosa para el botón final */
+        color: white;
+        padding: 15px 30px;
+        font-size: 24px;
+    }
+    .game-btn:hover {
+        transform: translateY(-2px);
+        background: #ffe680;
+    }
+    .game-btn.gate-btn:hover {
+        transform: translateY(-2px);
+        background: var(--accent-2);
+    }
+
+
+    .unlocked-photo {
+        max-width: 80%;
+        max-height: 250px; /* Altura de la foto de recompensa */
+        border: 5px solid var(--hp-gold);
+        border-radius: 10px;
+        margin-top: 20px;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+        display: none; /* Inicialmente oculto */
+    }
+    .unlocked-photo.visible {
+        display: block;
+        animation: fadeIn 1s forwards;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    /* -------------------- ESTILOS DE LA CARTA Y RECUERDOS -------------------- */
+    
+/* === NUEVOS ESTILOS PARA RECUERDOS (PENSADERO) === */
+#memoriesContent {
+    background: #fdfdfd; 
+    padding: 0; /* Quitamos padding aquí para que el scroll sea más limpio */
+    padding-top: 20px;
+}
+
+#memoriesContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 2 a 3 columnas en desktop, 1 en mobile */
+    gap: 15px;
+    width: 95%;
+    max-width: 850px; /* Un poco más de ancho para el grid */
+    margin: 20px auto 40px auto; 
+    padding: 10px;
+}
+
+.memory-entry {
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: var(--paper); /* Fondo blanco para las entradas individuales */
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    min-height: 250px; /* Altura mínima para que no se colapse */
+}
+.memory-entry:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.memory-entry img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+    /* EFECTO PENSADERO: Borroso y en escala de grises */
+    filter: blur(2px) grayscale(80%); 
+    transition: filter 0.5s ease;
+    z-index: 1;
+}
+
+.memory-entry:hover img {
+    /* Al pasar el ratón, se enfoca y se colorea */
+    filter: blur(0) grayscale(0); 
+}
+
+.memory-text {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 2;
+    padding: 15px;
+    text-align: left;
+    color: white; 
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0)); /* Degradado oscuro para legibilidad */
+    transition: background 0.3s ease;
+    min-height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.memory-entry:hover .memory-text {
+    background: linear-gradient(to top, rgba(14, 26, 64, 0.9), rgba(14, 26, 64, 0)); /* Azul HP oscuro al hacer hover */
+}
+
+.memory-text h3 {
+    font-family: 'Cinzel Decorative', serif;
+    color: var(--hp-gold); /* Título dorado HP */
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+.memory-text p {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--hp-silver); /* Descripción plateada HP */
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+}
+.memory-entry:hover .memory-text p {
+    max-height: 200px; /* Altura suficiente para mostrar el texto al hacer hover */
+    opacity: 1;
+}
+/* === FIN NUEVOS ESTILOS PARA RECUERDOS (PENSADERO) === */
+
+
+    .back-button { 
+        position: sticky;
+        top: 20px;
+        left: 20px;
+        align-self: flex-start;
+        z-index: 20;
+        margin-bottom: 10px;
+        margin-left: 20px;
+        /* Estilo para que se vea bien como botón de regreso */
+        background: #f0f0f0; 
+        color: var(--text);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 16px;
+        font-weight: normal;
+    }
+    .back-button:hover {
+        background: #e0e0e0;
+        transform: translateY(-1px);
+    
+    }
+
+    /* Contenido de la Carta (Estilos HP) */
+    header{
+        display:flex; gap:16px; align-items:center; margin-bottom:12px;
+    }
+    .heart-logo{
+        width:74px;height:74px;border-radius:12px; display:grid;place-items:center;
+        background:linear-gradient(135deg,var(--accent),var(--accent-2));
+        color:white;font-weight:700;font-size:28px;
+        box-shadow:0 8px 20px rgba(255,92,138,0.28);
+    }
+    h1{ margin:0; font-size:24px; letter-spacing:0.2px; }
+    p.lead{ margin:6px 0 18px 0; color:#5b3a3a; }
+    .paper-content { 
+        background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,250,250,0.9));
+        border-radius:12px; padding:22px; border: 1px solid rgba(200,150,150,0.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    /* Estilos de HP para la Carta: Simula un pergamino */
+    #finalContent .letter {
+        font-family: 'Georgia', serif;
+        font-size: 18px;
+        line-height: 1.6;
+        padding: 30px;
+        background: #fffff6; /* Un color crema para el pergamino */
+        border: 1px solid #c0a060; /* Borde de pergamino */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        color: #3e2a2a; /* Color de texto oscuro para que se lea bien en el pergamino */
+        white-space: pre-wrap;
+        border-radius: 4px;
+    }
+    /* Estilos de HP para el Encabezado de la Carta */
+    #finalContent h1, #finalContent p.lead {
+        font-family: 'Cinzel Decorative', serif;
+        color: var(--hp-red);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Estilos de HP para las fotos y videos */
+    #finalContent .photo, #finalContent .photo1, #finalContent .video-box { 
+        border: 3px solid var(--hp-gold); /* Borde dorado HP */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Sombra más fuerte */
+        background: var(--hp-dark-bg); /* Fondo oscuro para el media */
+    }
+
+    .media-row{
+        display:flex; gap:12px; margin-top:14px; align-items:flex-start;
+        flex-wrap:wrap; justify-content: center; 
+    }
+    .photo, .photo1, .video-box { 
+        flex: 1 1 calc(50% - 6px); min-width: 150px; border-radius:12px;
+        overflow:hidden; border: 3px solid rgba(255,150,180,0.12);
+        box-shadow: 0 8px 20px rgba(50,20,20,0.06); background:#000;
+    }
+    .photo img, .photo1 img, .video-box video{
+        width:100%; height: 450px; max-height: 450px; object-fit: cover; display:block;
+    }
+    .controls{
+        display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap: wrap; 
+    }
+    .btn.audio-control { min-width: 150px; text-align: left; }
+    .btn {
+        padding:8px 12px;border-radius:10px;border:none;
+        background:linear-gradient(90deg,var(--accent),var(--accent-2));
+        color:white;font-weight:600;cursor:pointer;
+        box-shadow:0 6px 18px rgba(255,92,138,0.18);
+        transition: transform 0.2s, background 0.2s; 
+    }
+    .btn.secondary{
+        background:transparent;color:var(--accent);border:1px solid rgba(255,92,138,0.12);
+        box-shadow:none;font-weight:600;
+    }
+    #volumeControl { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
+    #volumeSlider { -webkit-appearance: none; width: 100px; height: 8px; background: var(--accent-2); border-radius: 4px; outline: none; transition: background 0.2s; }
+    #volumeSlider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    #volumeIcon { font-size: 18px; color: var(--accent); }
+    .hearts{ pointer-events:none; position:absolute;inset:0;z-index:0; overflow: hidden; }
+    .heart { position:absolute; width:34px;height:34px; opacity:0.95; background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.6), transparent 30%), linear-gradient(135deg,var(--accent),var(--accent-2)); clip-path: path('M10.5 3.5C7 .3 0 1.3 0 6.9 0 11.3 9.5 14.7 10.5 18 11.5 14.7 21 11.3 21 6.9 21 1.3 14 0.3 10.5 3.5Z'); animation: floatUp linear infinite; }
+    @keyframes floatUp{ 0%{ transform: translateY(100%) scale(0.6); opacity:0; } 10%{ opacity:1; } 100%{ transform: translateY(-50%) scale(1.2); opacity:0; } }
+    @media (max-width:720px){
+        .media-row{flex-direction:column}
+        header{gap:12px}
+        .photo, .photo1, .video-box { flex: 1 1 100%; max-width: 100%; }
+    }
+    @media (min-width: 721px) {
+        .photo, .photo1, .video-box { flex: 1 1 calc(50% - 6px); }
+    }
+    footer{
+        margin-top:18px; font-size:13px;color:#6e4b4b;
+        display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
+    }
+    
+    /* === ANIMACIÓN DE PUNTOS === */
+    .points-message {
+        position: absolute;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 4em; /* Muy grande */
+        font-weight: bold;
+        color: #FFD700; /* Dorado, el color base */
+        text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        animation: pointsFloat 2s ease-out forwards;
+        z-index: 1000;
+    }
+
+    @keyframes pointsFloat {
+        0% { transform: translate(-50%, 0) scale(1); opacity: 0; }
+        20% { opacity: 1; }
+        80% { transform: translate(-50%, -100px) scale(1.2); opacity: 1; }
+        100% { transform: translate(-50%, -150px) scale(0.8); opacity: 0; }
+        
+    }
+    
+    /* === FIN ANIMACIÓN DE PUNTOS === */
+
+    /* --- NUEVOS ESTILOS PARA LA PANTALLA DE LOGIN --- */
+    #loginScreen {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, var(--hp-dark-bg) 0%, #000 100%); /* Fondo oscuro temático */
+        z-index: 100; /* Asegura que esté por encima de todo */
+        color: white;
+        text-align: center;
+        transition: opacity 0.5s ease;
+    }
+
+    #loginScreen.hidden {
+        opacity: 0;
+        pointer-events: none; /* Desactiva el clic cuando está oculta */
+    }
+
+    #loginScreen h2 {
+        color: var(--hp-gold);
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 38px;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 5px rgba(255, 215, 0, 0.4);
+    }
+
+    #loginForm {
+        background: rgba(0,0,0,0.7);
+        padding: 30px 40px;
+        border-radius: 12px;
+        border: 3px solid var(--hp-silver);
+        box-shadow: 0 0 25px rgba(192, 192, 192, 0.3);
+    }
+
+    #loginInput {
+        padding: 12px;
+        font-size: 20px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 8px;
+        text-align: center;
+        background: var(--paper);
+        color: var(--text);
+        width: 250px;
+        /* Usa el mismo estilo de borde que tus inputs de juego */
+        border: 2px solid var(--hp-gold); 
+    }
+    /* ------------------------------------------------ */
+
+    /* El card principal debe empezar oculto */
+    #mainCard {
+        display: none; 
+    }
+</style>
+</head>
+<body onload="checkInitialAccess()">
+    <div id="loginScreen">
+        <div id="loginForm">
+            <h2>El Acceso Secreto</h2>
+            <p>Introduce el Encantamiento Correcto para entrar al castillo. </p>
+            <input type="password" id="loginInput" placeholder="Contraseña Mágica" onkeypress="handleKeyPress(event)" />
+            <button class="game-btn" onclick="validatePassword()">Entrar</button>
+            <p style="margin-top: 15px; font-size: 14px; color: #aaa;">La contraseña es la fecha de su cumpleaños, en formato dd/mm (ej. 15/07)</p>
+        </div>
+    </div>
+    <div class="card" id="mainCard" style="display:none;">
+        <div class="hearts" id="heartsLayer" aria-hidden="true"></div>
+
+        
+        <div id="introScreen" class="game-screen active" style="background-image: url('hogwarts-bg.jpg');">
+            <h2>¡Bienvenida a Hogwarts, Sharik!</h2>
+            <p>Se ha rumoreado que hoy es un día especial para una bruja muy talentosa. Para desbloquear tu regalo de cumpleaños, debes superar los retos de las cuatro Casas de Hogwarts.</p>
+            <p>Tu viaje comienza en Gryffindor. ¿Estás lista?</p>
+            <button class="game-btn" id="startButton">Comenzar el Reto</button>
+        </div>
+
+        
+        <div id="gryffindorScreen" class="game-screen" style="background-image: url('gryffindor-bg.jpg');">
+            <h2>El Reto de Gryffindor</h2>
+            <p>El coraje no es la ausencia de miedo, sino el triunfo sobre él. Responde la siguiente pregunta para demostrar tu valentía.</p>
+            <p id="gryffindorQuestion"></p>
+            <input type="text" id="gryffindorAnswer" class="game-input" placeholder="Tu respuesta (en minúsculas)..."/>
+            <button class="game-btn" onclick="checkAnswer('gryffindor')">Avanzar</button>
+            <img id="gryffindorPhoto" class="unlocked-photo" src="photo1.jpg" alt="Foto Gryffindor">
+        </div>
+
+        <div id="hufflepuffScreen" class="game-screen" style="background-image: url('hufflepuff-bg.jpg');">
+            <h2>El Reto de Hufflepuff</h2>
+            <p>Un espíritu leal y trabajador es la base de un buen mago. Demuestra tu dedicación y paciencia.</p>
+            <p id="hufflepuffQuestion"></p>
+            <input type="text" id="hufflepuffAnswer" class="game-input" placeholder="Tu respuesta (en minúsculas)..."/>
+            <button class="game-btn" onclick="checkAnswer('hufflepuff')">Avanzar</button>
+            <img id="hufflepuffPhoto" class="unlocked-photo" src="photo2.jpg" alt="Foto Hufflepuff">
+        </div>
+
+        <div id="ravenclawScreen" class="game-screen" style="background-image: url('ravenclaw-bg.jpg');">
+            <h2>El Reto de Ravenclaw</h2>
+            <p>La sabiduría y la sed de conocimiento son el camino hacia la grandeza. Demuestra tu ingenio.</p>
+            <p id="ravenclawQuestion"></p>
+            <input type="text" id="ravenclawAnswer" class="game-input" placeholder="Tu respuesta (en minúsculas)..."/>
+            <button class="game-btn" onclick="checkAnswer('ravenclaw')">Avanzar</button>
+            <img id="ravenclawPhoto" class="unlocked-photo" src="photo3.jpg" alt="Foto Ravenclaw">
+        </div>
+
+        <div id="slytherinScreen" class="game-screen" style="background-image: url('slytherin-bg.jpg');">
+            <h2>El Reto de Slytherin</h2>
+            <p>La ambición y la determinación son herramientas poderosas. ¿Puedes usar tu astucia para este desafío?</p>
+            <p id="slytherinQuestion"></p>
+            <input type="text" id="slytherinAnswer" class="game-input" placeholder="Tu respuesta (en minúsculas)..."/>
+            <button class="game-btn" onclick="checkAnswer('slytherin')">Avanzar</button>
+            <img id="slytherinPhoto" class="unlocked-photo" src="photo4.jpg" alt="Foto Slytherin">
+        </div>
+        <div id="memoryGateScreen" class="game-screen" style="background-image: url('pensieve-bg.jpg');">
+        <div class="hp-gate-box">
+         <h2>¡Mischief Managed! El Tesoro Oculto</h2>
+         <p>Los secretos de la Sala de los Menesteres se han revelado. Elige tu camino, Sharik: ¿Deseas sumergirte en los recuerdos del Pensadero o abrir el Pergamino Mágico con tu regalo (JAJA es una cartita)?</p>
+         <div class="button-container">
+         <button class="game-btn gate-btn memories-btn" onclick="showFinalSection('memoriesContent')">🧠 El Pensadero (Recuerditos)</button>
+         <button class="game-btn gate-btn letter-btn" onclick="showFinalSection('finalContent')">📜 El Pergamino Mágico (Cartita)</button>
+        </div>
+         <button class="game-btn secondary hp-secondary" onclick="showScreen('introScreen')" style="margin-top: 50px;">Volver al Gran Salón</button>
+         </div>
+        </div>
+    </div>
+
+    <div id="memoriesContent" class="final-section">
+        <button class="game-btn back-button" onclick="showScreen('memoryGateScreen')">← Volver a Elegir</button>
+        <header style="z-index:2;position:relative; text-align: center; margin: 0 auto; margin-top: 20px; width: 100%; max-width: 600px;">
+            <div style="display:flex; gap:16px; align-items:center; justify-content: center;">
+                <div class="heart-logo" style="background:linear-gradient(135deg, var(--hp-blue), var(--hp-silver));">✨</div> 
+                <div>
+                    <h1 style="color: var(--hp-blue);">El Pensadero de Nuestro Amor</h1>
+                    <p class="lead" style="color:var(--text);">Los recuerdos se mantienen borrosos hasta que los miras de cerca. Pasa el cursor sobre ellos para revivirlos.</p>
+                </div>
+            </div>
+        </header>
+        
+        <div id="memoriesContainer">
+            <div class="memory-entry">
+                <img src="foto-recuerdo-1.jpg" alt="Foto de la tortuga que le compre">
+                <div class="memory-text">
+                    <h3>Foto de la tortuga que le compre 🐢</h3>
+                    <p>Me acuerdo que ese dia salimos a la plaza y de la nada entramos una tienda que se llama LideModa, dimos vueltas hasta que usted vio la tortuga y le gusto y pues se la compre.</p>
+                </div>
+            </div>
+
+            <div class="memory-entry">
+                <img src="foto-recuerdo-2.jpg" alt="Foto de las medias que compre el mismo dia que la tortuga">
+                <div class="memory-text">
+                    <h3>Foto de las medias que compre el mismo dia que la tortuga </h3>
+                    <p>JAJAJ de esta foto me acuerdo que no sabiamos donde ir y yo la lleve a todos lados, primero al centro, le dije que entremos a tiendas para comprar cosas, y ya vi una tienda que vendian medias y le dije que eligiera la que le gustara y eligio esas (buenisimas) y luego cuando nos juntamos de nuevo resulta que nos pusimos las medias el mismo dia y por hicimos match
+                        .</p>
+                </div>
+            </div>
+            
+            <div class="memory-entry">
+                <img src="foto-recuerdo-3.jpg" alt="La noche que conocio a Loki y Canela">
+                <div class="memory-text">
+                    <h3>La noche que conocio a Loki y Canela</h3>
+                    <p>De esta foto me acuerdo que le dije que la queria ver aunque sea 5 minutos, entonces usted pidio permiso y le pregunte que si queria que lleve a los niños y usted me dijo que si(literalmente los vio crecer por fotos).</p>
+                </div>
+            </div>
+
+            <div class="memory-entry">
+                <img src="foto-recuerdo-4.jpg" alt="La polera que le regale la primera vez que se fue">
+                <div class="memory-text">
+                    <h3>La polera que le regale la primera vez que se fue</h3>
+                    <p>Cuando veo esta foto me acuerdo de usted llorando (yo lloraba en el colegio JAJAJAJAJ) tambien me acuerdo que me hizo hecharle la mitad de mi perfume solo porque le gustaba.</p>
+                </div>
+            </div>
+            
+            <div class="memory-entry">
+                <img src="foto-recuerdo-5.jpg" alt="Foto del dia que se puso celosa de un gatito">
+                <div class="memory-text">
+                    <h3>Foto del dia que se puso celosa de un gatito </h3>
+                    <p>JAJAJAJAJA se puso celosa porque le ponia mas atencion al gatito (no tenia mamita) y tambien se enojo porque lo puse en mi chompa.</p>
+                </div>
+            </div>
+            
+            <div class="memory-entry">
+                <img src="foto-recuerdo-6.jpg" alt="AWWWW la ves que dibujo flores Amarillas">
+                <div class="memory-text">
+                    <h3>AWWWW la ves que dibujo flores Amarillas</h3>
+                    <p>De esta foto me acuerdo que al segundo que me lo mando la puse de fondo de pantalla (incluso la tenia despues de que terminaramos)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="finalContent" class="final-section">
+        <button class="game-btn back-button" onclick="showScreen('memoryGateScreen')">← Volver a Elegir</button>
+        <header style="z-index:2;position:relative">
+            <div class="heart-logo">♥</div> 
+            <div>
+                <h1>Feliz 20 Sharik</h1>
+                <p class="lead">Un detalle hecho con cariño para usted, espero que hoy y siempre sonría.</p>
+            </div>
+        </header>
+
+        <section class="paper-content" style="z-index:2;position:relative">
+            <div class="letter" id="letterText">
+Querida Sharik
+
+¡Lo lograste! Has superado los retos de Hogwarts con la valentía de Gryffindor, la lealtad de Hufflepuff,
+la sabiduría de Ravenclaw y la determinación de Slytherin. Eres una bruja increíble y este regalo es
+la prueba de lo especial que eres para mí.
+
+Hoy celebra 20 vueltas alrededor del sol.
+Desde la primera vez que vi su sonrisa supe que había algo cálido y sincero en usted. Cada gesto suyo
+hace que todo se ilumine: sus ojos, su risa y esa forma de mirar el mundo con curiosidad y ternura.
+
+Quiero que recuerde que en este día especial merece todas las cosas bonitas: caricias,
+sorpresas y momentos que no se borren. Gracias por ser como es, por su paciencia,
+por su alegría, y por permitir que la admire poco a poco.
+
+Prometo cuidarla, acompañarla en sus sueños y celebrar cada logro a su lado.
+Feliz cumpleaños, mona de mi vida. Que este nuevo año le traiga amor, aventuras y mil razones
+para sonreír. LAa quiero más de lo que estas palabras alcanzan a decir.
+
+Con todo mi cariño.
+— Yaass
+            </div>
+
+            <div class="media-row">
+                <div class="video-box" aria-label="Video 1">
+                    <video id="theVideo1" controls playsinline>
+                        <source src="videoo.mp4" type="video/mp4">
+                        Tu navegador no soporta el tag de video.
+                    </video>
+                </div>
+                <div class="video-box" aria-label="Video 2"> 
+                    <video id="theVideo2" controls playsinline>
+                        <source src="video2.mp4" type="video/mp4"> 
+                        Tu navegador no soporta el tag de video.
+                    </video>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn audio-control" id="toggleAudioBtn">▶ Reproducir música</button>
+                
+                <div id="volumeControl">
+                    <span id="volumeIcon">🔊</span> 
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+                </div>
+                
+                <button class="btn secondary" id="toggleHearts">💓 Animaciones ON</button>
+
+                <audio id="bgAudio" loop>
+                    <source src="quiero decirte.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <footer>
+                <div>🎂 ¡Feliz 20 mi mona hermosa!</div>
+                <div style="opacity:0.9">Ya esta viejita :) ❤️</div>
+            </footer>
+        </section>
+    </div>
+<script>
+    // --- LÓGICA DE LOGIN CON CONTRASEÑA SIMPLE ---
+    const CORRECT_PASSWORD = "22/10"; // <--- ¡IMPORTANTE! CAMBIA ESTO POR LA CONTRASEÑA REAL
+    const mainCard = document.getElementById('mainCard');
+    const loginScreen = document.getElementById('loginScreen');
+    const loginInput = document.getElementById('loginInput');
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            validatePassword();
+        }
+    }
+
+    function validatePassword() {
+        const enteredPassword = loginInput.value.trim();
+
+        if (enteredPassword === CORRECT_PASSWORD) {
+            // Contraseña correcta: Ocultar login y mostrar contenido
+            loginScreen.classList.add('hidden');
+            mainCard.style.display = 'flex'; // Mostrar el contenido
+            // Iniciar el juego en la pantalla de introducción
+            showScreen('introScreen'); 
+            
+            // Opcional: Eliminar la pantalla de login del DOM después de la transición
+            setTimeout(() => {
+                loginScreen.remove(); 
+            }, 500); 
+        } else {
+            // Contraseña incorrecta: Mensaje de error
+            loginInput.value = '';
+            loginInput.placeholder = "¡Contraseña Incorrecta! Intenta de nuevo.";
+            loginInput.style.border = "2px solid red";
+            loginInput.focus();
+            if (navigator.vibrate) { 
+                navigator.vibrate(200);
+            }
+            setTimeout(() => {
+                loginInput.style.border = "2px solid var(--hp-gold)";
+                loginInput.placeholder = "Contraseña Mágica";
+            }, 1500);
+        }
+    }
+
+    function checkInitialAccess() {
+        // Esta función es llamada en el body onload. 
+        // Asegura que el input tenga el foco al cargar la página.
+        if (loginInput) {
+            loginInput.focus();
+        }
+    }
+    // --- FIN LÓGICA DE LOGIN ---
+
+    // -------------------- CONFIGURACIÓN DEL JUEGO --------------------
+    const GAME_STAGES = [
+        'introScreen', 'gryffindorScreen', 'hufflepuffScreen', 
+        'ravenclawScreen', 'slytherinScreen', 'memoryGateScreen' // Nueva pantalla de botones
+    ];
+    let currentStageIndex = 0;
+
+    // 🏆 PREGUNTAS Y RESPUESTAS DE HARRY POTTER
+    const houseChallenges = {
+        gryffindor: {
+            question: "El Coraje: ¿Cuál es el objeto mágico que Godric Gryffindor dejó en Hogwarts?",
+            answer: "espada", 
+            photoId: "gryffindorPhoto",
+            photoSrc: "photo1.jpg" 
+        },
+        hufflepuff: {
+            question: "La Lealtad: ¿Cuál es el nombre de pila de la fundadora de Hufflepuff?",
+            answer: "helga", 
+            photoId: "hufflepuffPhoto",
+            photoSrc: "photo2.jpg" 
+        },
+        ravenclaw: {
+            question: "La Sabiduría: ¿Qué objeto toca una persona para que la puerta de la Sala Común de Ravenclaw se abra?",
+            answer: "aldaba", 
+            photoId: "ravenclawPhoto",
+            photoSrc: "photo3.jpg" 
+        },
+        slytherin: {
+            question: "La Ambición: ¿Cuál es el nombre del enemigo principal de Harry Potter, excluyendo su título de Lord?",
+            answer: "voldemort", 
+            photoId: "slytherinPhoto",
+            photoSrc: "photo4.jpg" 
+        }
+    };
+
+    // -------------------- LÓGICA DEL JUEGO --------------------
+
+    // === AUDIO DE JUEGO ===
+    // Asegúrate de tener los archivos de sonido 'acierto.mp3' y 'error.mp3' en la misma carpeta.
+    const soundAcerto = new Audio('acierto.mp3'); 
+    const soundError = new Audio('error.mp3'); 
+    const bgAudio = document.getElementById('bgAudio'); // Ya tienes esta referencia en tu HTML
+    const volumeSlider = document.getElementById('volumeSlider');
+    const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+
+    // Inicializar volumen y controlador
+    bgAudio.volume = volumeSlider.value;
+    volumeSlider.addEventListener('input', () => {
+        bgAudio.volume = volumeSlider.value;
+    });
+
+    function updateAudioButton() {
+        toggleAudioBtn.textContent = bgAudio.paused ? '▶ Reproducir música' : '⏸ Pausar música';
+    }
+
+    toggleAudioBtn.addEventListener('click', () => {
+        if (bgAudio.paused) {
+            // Intenta reproducir. Esto solo funcionará si el usuario ya ha interactuado
+            bgAudio.play().catch(e => console.error("Error al reproducir audio:", e));
+        } else {
+            bgAudio.pause();
+        }
+        updateAudioButton();
+    });
+
+    function playSound(type) {
+        if (type === 'acierto') {
+            soundAcerto.currentTime = 0; 
+            soundAcerto.play().catch(e => console.log("No se pudo reproducir el sonido de acierto."));
+        } else if (type === 'error') {
+            soundError.currentTime = 0;
+            soundError.play().catch(e => console.log("No se pudo reproducir el sonido de error."));
+        }
+    }
+
+    function showPoints(houseName) {
+        const houseColor = {
+            gryffindor: 'var(--hp-red)', hufflepuff: 'var(--hp-yellow)', 
+            ravenclaw: 'var(--hp-blue)', slytherin: 'var(--hp-green)'
+        }[houseName];
+        
+        const card = document.getElementById('mainCard');
+        const points = document.createElement('div');
+        points.className = 'points-message';
+        points.textContent = `+10 Puntos ${houseName.toUpperCase()}!`;
+        points.style.color = houseColor;
+        
+        points.style.left = '50%';
+        points.style.top = '50%';
+        
+        card.appendChild(points);
+        
+        setTimeout(() => {
+            points.remove();
+        }, 2000); 
+    }
+
+    // Función modificada para manejar la navegación entre pantallas y secciones finales
+    function showScreen(screenId) {
+        // Oculta todas las pantallas de juego y secciones finales
+        document.querySelectorAll('.game-screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.querySelectorAll('.final-section').forEach(section => {
+             section.classList.remove('active');
+        });
+
+        const targetScreen = document.getElementById(screenId);
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+            
+            // Lógica para enfocar el input en pantallas de reto
+            const input = targetScreen.querySelector('.game-input');
+            if (input) {
+                input.value = ''; 
+                input.focus();
+            }
+        }
+        
+        // Detener la música si se sale de la Carta
+        if (screenId !== 'finalContent') {
+             bgAudio.pause();
+             updateAudioButton();
+        }
+    }
+    
+    // Nueva función para mostrar las secciones finales (Recuerdos o Carta)
+    function showFinalSection(sectionId) {
+        showScreen(sectionId); // Llama a showScreen para ocultar todo y mostrar la sección
+
+        // Lógica específica si entramos a la carta (para la música)
+        if (sectionId === 'finalContent') {
+            bgAudio.play().catch(e => console.error("Error al iniciar audio en contenido final:", e));
+            updateAudioButton();
+            // Asegúrate de que los videos estén pausados inicialmente para no tener dos fuentes de audio
+            document.getElementById('theVideo1').pause();
+            document.getElementById('theVideo2').pause();
+        }
+    }
+
+
+    function startGame() {
+        currentStageIndex = 1; 
+        updateHouseScreen('gryffindor');
+        showScreen(GAME_STAGES[currentStageIndex]);
+    }
+    document.getElementById('startButton').addEventListener('click', startGame);
+
+    function updateHouseScreen(houseName) {
+        const challenge = houseChallenges[houseName];
+        document.getElementById(`${houseName}Question`).textContent = challenge.question;
+        // Limpiar input y ocultar foto
+        const input = document.getElementById(`${houseName}Answer`);
+        input.value = '';
+        input.placeholder = "Tu respuesta (en minúsculas)...";
+        input.style.border = "2px solid var(--hp-gold)";
+        document.getElementById(challenge.photoId).classList.remove('visible');
+    }
+
+    function checkAnswer(houseName) {
+        const challenge = houseChallenges[houseName];
+        const inputElement = document.getElementById(`${houseName}Answer`);
+        const userAnswer = inputElement.value.toLowerCase().trim();
+
+        if (userAnswer === challenge.answer.toLowerCase()) {
+            
+            playSound('acierto'); 
+            showPoints(houseName); 
+            
+            document.getElementById(challenge.photoId).classList.add('visible'); 
+            
+            // Si es la última casa (Slytherin), pasa a la pantalla de la Puerta de la Memoria
+            if (houseName === 'slytherin') {
+                 setTimeout(() => {
+                    showScreen('memoryGateScreen');
+                }, 2500); // 2.5 segundos para ver la foto y los puntos
+            } else {
+                // Pasa a la siguiente casa
+                setTimeout(() => {
+                    currentStageIndex++;
+                    const nextHouseName = GAME_STAGES[currentStageIndex].replace('Screen', '');
+                    updateHouseScreen(nextHouseName); // Prepara la siguiente pregunta
+                    showScreen(GAME_STAGES[currentStageIndex]); // Muestra la siguiente pantalla
+                }, 2500);
+            }
+        } else {
+            // Respuesta incorrecta
+            playSound('error');
+            inputElement.value = '';
+            inputElement.placeholder = "¡Respuesta incorrecta! Intenta de nuevo.";
+            inputElement.style.border = "2px solid red";
+            inputElement.focus();
+            if (navigator.vibrate) { 
+                navigator.vibrate(200);
+            }
+            setTimeout(() => {
+                inputElement.style.border = "2px solid var(--hp-gold)";
+                inputElement.placeholder = "Tu respuesta (en minúsculas)...";
+            }, 1500);
+        }
+    }
+    
+    // Añadir el evento Enter a los inputs de las casas para comodidad
+    document.querySelectorAll('.game-input').forEach(input => {
+        input.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const screenId = input.closest('.game-screen').id;
+                const houseName = screenId.replace('Screen', '');
+                checkAnswer(houseName);
+            }
+        });
+    });
+
+
+    // === LÓGICA DE ANIMACIÓN DE CORAZONES ===
+    const heartsLayer = document.getElementById('heartsLayer');
+    let heartsEnabled = true;
+
+    function createHeart() {
+        if (!heartsEnabled) return;
+
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        
+        // Posición horizontal aleatoria
+        const x = Math.random() * 100;
+        heart.style.left = `${x}%`;
+        
+        // Duración de la animación y escala aleatorias
+        const duration = Math.random() * 5 + 5; // 5s a 10s
+        const size = Math.random() * 0.8 + 0.4; // 0.4 a 1.2
+        
+        heart.style.animationDuration = `${duration}s`;
+        heart.style.width = `${34 * size}px`;
+        heart.style.height = `${34 * size}px`;
+        
+        heartsLayer.appendChild(heart);
+
+        // Eliminar el corazón después de que termine la animación
+        setTimeout(() => {
+            heart.remove();
+        }, duration * 1000);
+    }
+
+    let heartInterval;
+    function startHearts() {
+        if (heartInterval) clearInterval(heartInterval);
+        heartInterval = setInterval(createHeart, 800); 
+    }
+
+    function stopHearts() {
+        if (heartInterval) clearInterval(heartInterval);
+    }
+
+    // Control del botón de corazones
+    const toggleHeartsBtn = document.getElementById('toggleHearts');
+    toggleHeartsBtn.addEventListener('click', () => {
+        heartsEnabled = !heartsEnabled;
+        toggleHeartsBtn.textContent = heartsEnabled ? '💓 Animaciones ON' : '💔 Animaciones OFF';
+        if (heartsEnabled) {
+            startHearts();
+        } else {
+            stopHearts();
+            // Eliminar los corazones existentes
+            heartsLayer.innerHTML = '';
+        }
+    });
+
+    // Iniciar las animaciones al cargar
+    startHearts();
+
+</script>
+</body>
+</html>
